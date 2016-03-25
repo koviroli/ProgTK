@@ -12,6 +12,7 @@ import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Line;
+import javafx.scene.text.Text;
 import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
 
@@ -47,6 +48,10 @@ public class BowManGameApplication extends Application {
 	private final GraphicsContext archerGc = archerCanvas.getGraphicsContext2D();
 	
 	private Line aimLine;
+	private Text strengthText = new Text();
+	private Text angleText = new Text();
+	private double strengthStartX, strengthStartY;
+	private double angleTextX, angleTextY;
 	
 	//////////////////////////////////////////
 	//
@@ -55,6 +60,7 @@ public class BowManGameApplication extends Application {
 	//////////////////////////////////////////
 	Button button = new Button();
 	StackPane stackPaneRoot = new StackPane();
+	
 	
 	/* This method refresh the scene, by redraw everything*/
 	public void refreshScene(){
@@ -68,6 +74,27 @@ public class BowManGameApplication extends Application {
 		backgroundGc.drawImage(background.getBackgroundImage(), background.getPositionX(), background.getPositionY());
 		bowGc.drawImage(bow.getBowImage(), bow.getPositionX() , bow.getPositionY());
 		archerGc.drawImage(archer.getArcherImage(), archer.getPositionX(), archer.getPositionY());
+	}
+	
+	/**
+	 * CalculateDistance is calculating the gaussian distance of two vectors A and B.
+	 * 
+	 * @param Ax is the A vector's x value 
+	 * @param Ay is the A vector's y value
+	 * @param Bx is the B vector's x value
+	 * @param By is the B vector's y value
+	 * @return the gaussian distance of A and B vector
+	 */
+	private double calculateDistance(double Ax, double Ay, double Bx, double By){
+		return  Math.sqrt( Math.pow(Ax-Bx, 2) + Math.pow(Ay-By, 2)) ;
+	}
+	
+	private void setStrenghTextNull(){
+		strengthText.setText("");
+	}
+	
+	private void setAngleTextNull(){
+		angleText.setText("");
 	}
 	
 	/**
@@ -116,6 +143,14 @@ public class BowManGameApplication extends Application {
                 	aimLine.setStartX(e.getX());
                 	aimLine.setStartY(e.getY());
                 	
+                	strengthStartX = e.getX();
+                	strengthStartY = e.getY();
+                	angleTextX = e.getX();
+                	angleTextY = e.getY();
+                	
+                	angleText.setX(e.getX());
+                	angleText.setY(e.getY());
+                	
                     System.out.println("mouse pressed x:" + e.getX() + " y:" +e.getY());
                 }  
             }
@@ -128,14 +163,22 @@ public class BowManGameApplication extends Application {
 		gameScene.addEventHandler(MouseEvent.MOUSE_DRAGGED, new EventHandler<MouseEvent>() {
   
 			public void handle(MouseEvent e) {
+				
 				aimLine.setEndX(e.getX());
        	     	aimLine.setEndY(e.getY());
+       	     	
+       	     	strengthText.setX(e.getX());
+       	     	strengthText.setY(e.getY());
+       	     	
+       	     	
+       	     	strengthText.setText( String.format("%.2f", calculateDistance(strengthStartX, strengthStartY, e.getX(), e.getY())));
+       	     	angleText.setText(String.format("%.2f", Math.cos( (800.0*e.getX())+(0.0*e.getY())/180)  ) + " °");
        	     	
        	     	/**
        	     	 * Set that we could only aim to the right side of the screen.
        	     	 */
-       	     	bow.setRotate( -(((360.0/WindowWidth)/2)*e.getY()-90.0) );
-            	
+       	     	bow.setRotate( -(((360.0/600)/2.0)*e.getY()-90.0) );
+
        	     	Rotate r = new Rotate(bow.getRotate(), 102, 400);
        	     	bowGc.setTransform(r.getMxx(), r.getMyx(), r.getMxy(), r.getMyy(), r.getTx(), r.getTy());
        	     	
@@ -149,11 +192,16 @@ public class BowManGameApplication extends Application {
 		gameScene.addEventFilter(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
 
             public void handle(MouseEvent e) {
+            	
             	aimLine.setStartX(0.0f);
             	aimLine.setStartY(0.0f);
             	aimLine.setEndX(0.0f);
             	aimLine.setEndY(0.0f);
-                System.out.println("mouse clicked " + e.getX() + "|" + e.getY() );
+            	
+            	setStrenghTextNull();
+                setAngleTextNull();
+            	
+            	System.out.println("mouse clicked " + e.getX() + "|" + e.getY() );
             }
         });
 		
@@ -172,6 +220,8 @@ public class BowManGameApplication extends Application {
 		root.getChildren().add(aimLine);
 		root.getChildren().add(archer.getLeftArm());
 		root.getChildren().add(archer.getRightArm());
+		root.getChildren().add(strengthText);
+		root.getChildren().add(angleText);
 		stackPaneRoot.getChildren().add(button);
 		
 		//theStage.setScene(scene);
