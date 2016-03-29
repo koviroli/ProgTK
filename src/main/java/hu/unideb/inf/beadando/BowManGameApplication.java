@@ -9,6 +9,8 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Line;
@@ -51,7 +53,7 @@ public class BowManGameApplication extends Application {
 	private Text strengthText = new Text();
 	private Text angleText = new Text();
 	private double strengthStartX, strengthStartY;
-	private double angleTextX, angleTextY;
+	private double angleX2, angleY2;
 	
 	//////////////////////////////////////////
 	//
@@ -77,16 +79,29 @@ public class BowManGameApplication extends Application {
 	}
 	
 	/**
-	 * CalculateDistance is calculating the gaussian distance of two vectors A and B.
-	 * 
-	 * @param Ax is the A vector's x value 
-	 * @param Ay is the A vector's y value
-	 * @param Bx is the B vector's x value
-	 * @param By is the B vector's y value
+	 * Calculating the gaussian distance of two vectors A and B.
+	 * @param Ax is the A vector's x coordinate
+	 * @param Ay is the A vector's y coordinate
+	 * @param Bx is the B vector's x coordinate
+	 * @param By is the B vector's y coordinate
 	 * @return the gaussian distance of A and B vector
 	 */
 	private double calculateDistance(double Ax, double Ay, double Bx, double By){
 		return  Math.sqrt( Math.pow(Ax-Bx, 2) + Math.pow(Ay-By, 2)) ;
+	}
+	
+	/**
+	 * @param x1 A vector's x coordinate
+	 * @param y1 A vector's Y coordinate
+	 * @param x2 B vector's x coordinate
+	 * @param y2 B vector's y coordinate
+	 * @return the angle of two vectors
+	 */
+	
+	public float getAngle(double x1, double y1, double x2, double y2) {
+	    float angle = -(float) Math.toDegrees(Math.atan2(y2 - y1 , x2 - x1   ));
+
+	    return angle;
 	}
 	
 	private void setStrenghTextNull(){
@@ -97,9 +112,7 @@ public class BowManGameApplication extends Application {
 		angleText.setText("");
 	}
 	
-	/**
-	 * The start of the application
-	 */
+	//Start of the application
 	@Override
 	public void start(final Stage theStage) throws Exception {
 		Group root = new Group();
@@ -117,23 +130,21 @@ public class BowManGameApplication extends Application {
     	Scene loginScene = new Scene(stackPaneRoot, 480, 240);
     	button.setText("START");
     	
-		new AnimationTimer() {
-			
+		new AnimationTimer() {	
 			@Override
 			public void handle(long now) {
-				
+		
 				refreshScene();
 				
-				drawObjects();
-					
+				drawObjects();			
 			}
 
 		}.start();
 		
 		/**
-		 * This event handle that when the user pushes the mouse button.
-		 * It's the start of the shoot, after this part we measure the power if shoot, with
-		 * dragging the mouse and when the mouse click released the shoot released too.
+		 * This event handle that when the user keeps pushing the mouse button.
+		 * It's the start of the shot, after this part we measure the power of shot, with
+		 * dragging the mouse and when the mouse click released the shot released too.
 		 */
 		gameScene.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
 
@@ -143,10 +154,8 @@ public class BowManGameApplication extends Application {
                 	aimLine.setStartX(e.getX());
                 	aimLine.setStartY(e.getY());
                 	
-                	strengthStartX = e.getX();
-                	strengthStartY = e.getY();
-                	angleTextX = e.getX();
-                	angleTextY = e.getY();
+                	strengthStartX = angleX2 = e.getX();
+                	strengthStartY = angleY2 = e.getY();
                 	
                 	angleText.setX(e.getX());
                 	angleText.setY(e.getY());
@@ -157,8 +166,8 @@ public class BowManGameApplication extends Application {
         });
 		
 		/**
-		 * Event for handling when mouse is clicked down, and dragging it.
-		 * It helps the to draw assistantLine and the measure the power of shoot.
+		 * Event for handling when mouse is clicked, and dragging it.
+		 * It helps the to draw assistantLine and the measure the power of shot.
 		 */
 		gameScene.addEventHandler(MouseEvent.MOUSE_DRAGGED, new EventHandler<MouseEvent>() {
   
@@ -170,15 +179,12 @@ public class BowManGameApplication extends Application {
        	     	strengthText.setX(e.getX());
        	     	strengthText.setY(e.getY());
        	     	
-       	     	
        	     	strengthText.setText( String.format("%.2f", calculateDistance(strengthStartX, strengthStartY, e.getX(), e.getY())));
-       	     	angleText.setText(String.format("%.2f", Math.cos( (800.0*e.getX())+(0.0*e.getY())/180)  ) + " °");
        	     	
-       	     	/**
-       	     	 * Set that we could only aim to the right side of the screen.
-       	     	 */
-       	     	bow.setRotate( -(((360.0/600)/2.0)*e.getY()-90.0) );
-
+       	     	angleText.setText(String.format("%.2f", getAngle(e.getX(), e.getY(), angleX2, angleY2 )) + " °");
+       	     	
+       	     	//set the angle of rotation of the bow
+       	     	bow.setRotate(  -getAngle(e.getX(), e.getY(), angleX2, angleY2 ) );
        	     	Rotate r = new Rotate(bow.getRotate(), 102, 400);
        	     	bowGc.setTransform(r.getMxx(), r.getMyx(), r.getMxy(), r.getMyy(), r.getTx(), r.getTy());
        	     	
@@ -187,7 +193,7 @@ public class BowManGameApplication extends Application {
         });
 		/**
 		 * Event for handling when mouse is clicked, when the user shoots
-		 * This part helps to manage assistantLine and the shoot the arrow from the bow.
+		 * This part helps to manage assistantLine and the shot.
 		 */
 		gameScene.addEventFilter(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
 
@@ -204,6 +210,15 @@ public class BowManGameApplication extends Application {
             	System.out.println("mouse clicked " + e.getX() + "|" + e.getY() );
             }
         });
+		
+		//Exit when escape pressed
+		gameScene.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
+			public void handle(KeyEvent k){		
+				if (k.getCode() == KeyCode.ESCAPE){
+					theStage.close();
+				}
+			}
+		});
 		
 		button.setOnAction(new EventHandler<ActionEvent>() {
 

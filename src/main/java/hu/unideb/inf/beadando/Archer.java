@@ -60,6 +60,7 @@ public class Archer extends BowManGameObject {
 	public void MoveTo(double x, double y){
 		this.setPositionXY(x, y);
 	}
+	
 	/**
 	 * setDefaultLeftArm function is set the default values of the
 	 * archer's left arm.
@@ -71,6 +72,19 @@ public class Archer extends BowManGameObject {
 		this.leftArm.setEndY(340);
 	}
 	
+	public void setLeftArmX(double value){
+		this.leftArm.setEndX(value);
+	}
+	
+	public double getLeftArmX(){
+		return this.leftArm.getEndX();
+	}
+	
+	public double getLeftArmY(){
+		return this.leftArm.getEndY();
+	}
+	
+	
 	/**
 	 * setDefaultRightArm function is set the default values of the
 	 * archer's right arm. 
@@ -81,6 +95,19 @@ public class Archer extends BowManGameObject {
 		this.rightArm.setEndX(180);
 		this.rightArm.setEndY(450);
 	}
+	
+	public void setRightArmX(double value){
+		this.rightArm.setEndX(value);
+	}
+	
+	public double getRightArmX(){
+		return this.rightArm.getEndX();
+	}
+	
+	public double getRightArmY(){
+		return this.rightArm.getEndY();
+	}
+	
 	
 	/**
 	 * Gives back the left arm of the archer
