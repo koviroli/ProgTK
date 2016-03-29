@@ -18,19 +18,24 @@ public class Archer extends BowManGameObject {
 	private int pullStrength;
 
 	/* The image of archer object */
-	private Image archerImage;
+	private Image archerBodyImage;
+	private Image archerLeftArmImage;
+	private Image archerRightArmImage;
+	private double leftArmRotate, rightArmRotate;
 	
 	private Line leftArm, rightArm;
 	
 	public void initalize() throws IOException {
-		setArcherImage( new Image("pictures/archer_image_v2.png") );
+		setArcherBodyImage( new Image("pictures/archer_image_v2.png") );
+		setArcherLeftArmImage(new Image("pictures/left_arm.png"));
+		setArcherRightArmImage(new Image("pictures/right_arm.png"));
 		this.MoveTo(0, 250);
-		leftArm = new Line(); 
-		rightArm = new Line();
-		leftArm.setStrokeWidth(1.5);
-		rightArm.setStrokeWidth(1.5);
-		setDefaultLeftArm();
-		setDefaultRightArm();
+		//leftArm = new Line(); 
+		//rightArm = new Line();
+		//leftArm.setStrokeWidth(1.5);
+		//rightArm.setStrokeWidth(1.5);
+		//setDefaultLeftArm();
+		//setDefaultRightArm();
 	}
 	
 	public int getPullStrength() {
@@ -41,29 +46,63 @@ public class Archer extends BowManGameObject {
 		this.pullStrength = pullStrength;
 	}
 
-	public void pullBow(){
-		System.out.println( "archer pullBow()" );
+	public Image getArcherBodyImage() {
+		return archerBodyImage;
+	}
+
+	public void setArcherBodyImage(Image image) {
+		this.archerBodyImage = image;
 	}
 	
-	public void shoot(){
-		System.out.println( "archer shoot()" );
+	public Image getArcherLeftArmImage() {
+		return archerLeftArmImage;
 	}
 
-	public Image getArcherImage() {
-		return archerImage;
+	public void setArcherLeftArmImage(Image archerLeftArmImage) {
+		this.archerLeftArmImage = archerLeftArmImage;
 	}
 
-	public void setArcherImage(Image image) {
-		this.archerImage = image;
+	public Image getArcherRightArmImage() {
+		return archerRightArmImage;
+	}
+
+	public void setArcherRightArmImage(Image archerRightArmImage) {
+		this.archerRightArmImage = archerRightArmImage;
 	}
 	
 	public void MoveTo(double x, double y){
 		this.setPositionXY(x, y);
 	}
 	
+	public void setLeftArmRotate(double rotate){
+		this.leftArmRotate = rotate;
+	}
+	
+	public void setRightArmRotate(double rotate){
+		this.rightArmRotate = rotate;
+	}
+	
+	public double getLeftArmRotate(){ return this.leftArmRotate; }
+	
+	public double getRightArmRotate(){ return this.rightArmRotate; }
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	/**
-	 * setDefaultLeftArm function is set the default values of the
-	 * archer's left arm.
+	 * setDefaultLeftArm function is set the default values of the archer's left arm.
 	 */	
 	public void setDefaultLeftArm(){
 		this.leftArm.setStartX(102);
@@ -76,6 +115,10 @@ public class Archer extends BowManGameObject {
 		this.leftArm.setEndX(value);
 	}
 	
+	public void setLeftArmY(double value){
+		this.leftArm.setEndY(value);
+	}
+	
 	public double getLeftArmX(){
 		return this.leftArm.getEndX();
 	}
@@ -86,8 +129,7 @@ public class Archer extends BowManGameObject {
 	
 	
 	/**
-	 * setDefaultRightArm function is set the default values of the
-	 * archer's right arm. 
+	 * function is set the default values of the archer's right arm. 
 	 */
 	public void setDefaultRightArm(){
 		this.rightArm.setStartX(102);
@@ -99,6 +141,11 @@ public class Archer extends BowManGameObject {
 	public void setRightArmX(double value){
 		this.rightArm.setEndX(value);
 	}
+	
+	public void setRightArmY(double value){
+		this.rightArm.setEndY(value);
+	}
+	
 	
 	public double getRightArmX(){
 		return this.rightArm.getEndX();
@@ -121,4 +168,5 @@ public class Archer extends BowManGameObject {
 	 * @return Line with archer's left arm's parameters
 	 */
 	public Line getRightArm(){ return this.rightArm; }
+
 }

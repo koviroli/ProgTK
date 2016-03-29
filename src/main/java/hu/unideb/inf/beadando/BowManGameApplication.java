@@ -43,11 +43,15 @@ public class BowManGameApplication extends Application {
 	
 	private final Canvas backgroundCanvas = new Canvas(WindowWidth, WindowHeigth);
 	private final Canvas bowCanvas = new Canvas(WindowWidth, WindowHeigth);
-	private final Canvas archerCanvas = new Canvas(WindowWidth, WindowHeigth);
-
+	private final Canvas archerBodyCanvas = new Canvas(WindowWidth, WindowHeigth);
+	private final Canvas archerLeftArmCanvas = new Canvas(WindowWidth, WindowHeigth);
+	private final Canvas archerRightArmCanvas = new Canvas(WindowWidth, WindowHeigth);
+	
 	private final GraphicsContext backgroundGc = backgroundCanvas.getGraphicsContext2D();
 	private final GraphicsContext bowGc = bowCanvas.getGraphicsContext2D();
-	private final GraphicsContext archerGc = archerCanvas.getGraphicsContext2D();
+	private final GraphicsContext archerGc = archerBodyCanvas.getGraphicsContext2D();
+	private final GraphicsContext archerLeftArmGc = archerLeftArmCanvas.getGraphicsContext2D();
+	private final GraphicsContext archerRightArmGc = archerRightArmCanvas.getGraphicsContext2D();
 	
 	private Line aimLine;
 	private Text strengthText = new Text();
@@ -70,12 +74,16 @@ public class BowManGameApplication extends Application {
 		backgroundGc.clearRect(0, 0, WindowWidth, WindowHeigth);
 		bowGc.clearRect(0, 0, WindowWidth, WindowHeigth);
 		archerGc.clearRect(0, 0, WindowWidth, WindowHeigth);
+		archerLeftArmGc.clearRect(0, 0, WindowWidth, WindowHeigth);
+		archerRightArmGc.clearRect(0, 0, WindowWidth, WindowHeigth);
 	}
 	
 	private void drawObjects() {
 		backgroundGc.drawImage(background.getBackgroundImage(), background.getPositionX(), background.getPositionY());
 		bowGc.drawImage(bow.getBowImage(), bow.getPositionX() , bow.getPositionY());
-		archerGc.drawImage(archer.getArcherImage(), archer.getPositionX(), archer.getPositionY());
+		archerGc.drawImage(archer.getArcherBodyImage(), archer.getPositionX(), archer.getPositionY());
+		archerLeftArmGc.drawImage(archer.getArcherLeftArmImage(), archer.getPositionX(), archer.getPositionY());
+		archerRightArmGc.drawImage(archer.getArcherRightArmImage(), archer.getPositionX(), archer.getPositionY());
 	}
 	
 	/**
@@ -185,8 +193,10 @@ public class BowManGameApplication extends Application {
        	     	
        	     	//set the angle of rotation of the bow
        	     	bow.setRotate(  -getAngle(e.getX(), e.getY(), angleX2, angleY2 ) );
+
        	     	Rotate r = new Rotate(bow.getRotate(), 102, 400);
        	     	bowGc.setTransform(r.getMxx(), r.getMyx(), r.getMxy(), r.getMyy(), r.getTx(), r.getTy());
+       	     	archerLeftArmGc.setTransform(r.getMxx(), r.getMyx(), r.getMxy(), r.getMyy(), r.getTx(), r.getTy());
        	     	
        	     	System.out.println("dragging mouse  " + e.getX() + " y:" +e.getY() );
             }
@@ -230,11 +240,13 @@ public class BowManGameApplication extends Application {
 		theStage.setTitle(WindowTitle);
 		
 		root.getChildren().add(backgroundCanvas);
-		root.getChildren().add(archerCanvas);
+		root.getChildren().add(archerBodyCanvas);
+		root.getChildren().add(archerLeftArmCanvas);
+		root.getChildren().add(archerRightArmCanvas);
 		root.getChildren().add(bowCanvas);
 		root.getChildren().add(aimLine);
-		root.getChildren().add(archer.getLeftArm());
-		root.getChildren().add(archer.getRightArm());
+		//root.getChildren().add(archer.getLeftArm());
+		//root.getChildren().add(archer.getRightArm());
 		root.getChildren().add(strengthText);
 		root.getChildren().add(angleText);
 		stackPaneRoot.getChildren().add(button);
