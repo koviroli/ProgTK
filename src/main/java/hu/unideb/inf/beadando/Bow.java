@@ -36,4 +36,6 @@ public class Bow extends BowManGameObject{
 	}
 	
 	
+	
+	
 }
