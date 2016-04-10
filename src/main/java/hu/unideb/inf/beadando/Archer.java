@@ -24,9 +24,9 @@ public class Archer extends BowManGameObject {
 	private double leftArmRotate, rightArmRotate;
 	
 	public void initalize() throws IOException {
-		setArcherBodyImage( new Image("pictures/archer_image_v2.png") );
-		setArcherLeftArmImage(new Image("pictures/left_arm.png"));
-		setArcherRightArmImage(new Image("pictures/right_arm.png"));
+		setArcherBodyImage( new Image("pictures/archer/archer_image_v2.png") );
+		setArcherLeftArmImage(new Image("pictures/archer/left_arm.png"));
+		setArcherRightArmImage(new Image("pictures/archer/right_arm.png"));
 		this.MoveTo(0, 250);
 	}
 	
@@ -63,7 +63,7 @@ public class Archer extends BowManGameObject {
 	}
 	
 	public void MoveTo(double x, double y){
-		this.setPositionXY(x, y);
+		setPositionXY(x, y);
 	}
 	
 	public void setLeftArmRotate(double rotate){

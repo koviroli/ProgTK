@@ -1,8 +1,10 @@
 package hu.unideb.inf.beadando;
 
+
 public class BowManGameObject {
 
 	private double positionX, positionY;
+	private double rotate;
 	
 	public BowManGameObject() {
 		this(0.0, 0.0);
@@ -33,5 +35,13 @@ public class BowManGameObject {
 	public void setPositionXY(double positionX, double positionY){
 		this.positionX = positionX;
 		this.positionY = positionY;
+	}
+	
+	public double getRotate() {
+		return rotate;
+	}
+
+	public void setRotate(double rotate) {
+		this.rotate = rotate;
 	}
 }

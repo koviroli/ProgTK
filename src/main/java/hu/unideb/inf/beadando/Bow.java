@@ -1,5 +1,7 @@
 package hu.unideb.inf.beadando;
 
+import java.io.IOException;
+
 import javafx.scene.image.Image;
 
 /**
@@ -11,20 +13,11 @@ import javafx.scene.image.Image;
  */
 public class Bow extends BowManGameObject{
 
-	private double Rotate;
 	private Image bowImage;
 	
-	public void initalize(){
-		setBowImage(new Image("pictures/bow_r_70pers.png"));
+	public void initalize() throws IOException {
+		setBowImage(new Image("pictures/bow/bow_r_70pers.png"));
 		this.setPositionXY(50, 300);
-	}
-
-	public double getRotate() {
-		return Rotate;
-	}
-
-	public void setRotate(double rotate) {
-		Rotate = rotate;
 	}
 
 	public Image getBowImage() {

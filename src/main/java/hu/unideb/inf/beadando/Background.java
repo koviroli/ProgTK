@@ -6,7 +6,8 @@ public class Background extends BowManGameObject {
 	private Image background;
 	
 	public void initalize(){
-		setBackgroundImage(new Image("pictures/background_image.png"));
+		setBackgroundImage(new Image("pictures/background/bg_castles_800_600.png"));
+		setPositionXY(0, -50);
 	}
 
 	public Image getBackgroundImage() {
